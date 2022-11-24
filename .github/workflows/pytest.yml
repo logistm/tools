@@ -3,11 +3,7 @@ name: Python tests
 # Only run if we changed a Python file
 on:
   push:
-    branches:
-      - dev
   pull_request:
-  release:
-    types: [published]
 
 # Cancel if a newer run is started
 concurrency:
@@ -16,13 +12,16 @@ concurrency:
 
 jobs:
   pytest:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-22.04, ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         name: Check out source-code repository
 
       - name: Set up Python ${{ matrix.python-version }}
